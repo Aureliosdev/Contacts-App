@@ -6,4 +6,4 @@ Tools makes this app look better:
 - Onboarding created in Figma
 - Tab Bar 
 - Custom design
--And a lot of features
+- And a lot of features
