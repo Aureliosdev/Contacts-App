@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D3732DE429B7733F00B3D560 /* OnboardingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3732DE329B7733F00B3D560 /* OnboardingModel.swift */; };
+		D3732DE629B7735800B3D560 /* OnboardingCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3732DE529B7735800B3D560 /* OnboardingCollectionViewCell.swift */; };
+		D3732DE829B7778A00B3D560 /* IAPManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3732DE729B7778A00B3D560 /* IAPManager.swift */; };
+		D3732DEA29B777AD00B3D560 /* PayWallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3732DE929B777AD00B3D560 /* PayWallViewController.swift */; };
+		D3732DED29B777C500B3D560 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = D3732DEC29B777C500B3D560 /* RevenueCat */; };
+		D3732DF029B778C100B3D560 /* StoreKitTestCertificateContacts.cer in Resources */ = {isa = PBXBuildFile; fileRef = D3732DEF29B778C100B3D560 /* StoreKitTestCertificateContacts.cer */; };
+		D3A3ABEA29A779D90014BB50 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A3ABE929A779D90014BB50 /* OnboardingViewController.swift */; };
 		D3F8460029A73A580049BF3A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F845FF29A73A580049BF3A /* AppDelegate.swift */; };
 		D3F8460229A73A580049BF3A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F8460129A73A580049BF3A /* SceneDelegate.swift */; };
 		D3F8460429A73A580049BF3A /* ContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F8460329A73A580049BF3A /* ContactsViewController.swift */; };
@@ -21,6 +28,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D3732DE329B7733F00B3D560 /* OnboardingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingModel.swift; sourceTree = "<group>"; };
+		D3732DE529B7735800B3D560 /* OnboardingCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCollectionViewCell.swift; sourceTree = "<group>"; };
+		D3732DE729B7778A00B3D560 /* IAPManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPManager.swift; sourceTree = "<group>"; };
+		D3732DE929B777AD00B3D560 /* PayWallViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayWallViewController.swift; sourceTree = "<group>"; };
+		D3732DEE29B7785600B3D560 /* Configuration purchases.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Configuration purchases.storekit"; sourceTree = "<group>"; };
+		D3732DEF29B778C100B3D560 /* StoreKitTestCertificateContacts.cer */ = {isa = PBXFileReference; lastKnownFileType = file; name = StoreKitTestCertificateContacts.cer; path = ../../../../../../Desktop/StoreKitTestCertificateContacts.cer; sourceTree = "<group>"; };
+		D3A3ABE929A779D90014BB50 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		D3F845FC29A73A580049BF3A /* Contacts App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Contacts App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3F845FF29A73A580049BF3A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D3F8460129A73A580049BF3A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -41,12 +55,34 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3732DED29B777C500B3D560 /* RevenueCat in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D3A3ABE729A779B40014BB50 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				D3A3ABE929A779D90014BB50 /* OnboardingViewController.swift */,
+				D3732DE529B7735800B3D560 /* OnboardingCollectionViewCell.swift */,
+				D3732DE329B7733F00B3D560 /* OnboardingModel.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		D3A3ABE829A779BA0014BB50 /* IAP Revenue Cat */ = {
+			isa = PBXGroup;
+			children = (
+				D3732DE729B7778A00B3D560 /* IAPManager.swift */,
+				D3732DE929B777AD00B3D560 /* PayWallViewController.swift */,
+				D3732DEE29B7785600B3D560 /* Configuration purchases.storekit */,
+				D3732DEF29B778C100B3D560 /* StoreKitTestCertificateContacts.cer */,
+			);
+			path = "IAP Revenue Cat";
+			sourceTree = "<group>";
+		};
 		D3F845F329A73A580049BF3A = {
 			isa = PBXGroup;
 			children = (
@@ -66,6 +102,8 @@
 		D3F845FE29A73A580049BF3A /* Contacts App */ = {
 			isa = PBXGroup;
 			children = (
+				D3A3ABE829A779BA0014BB50 /* IAP Revenue Cat */,
+				D3A3ABE729A779B40014BB50 /* Onboarding */,
 				D3F8461D29A751080049BF3A /* Cells */,
 				D3F8461629A73B310049BF3A /* Resources */,
 				D3F8461529A73B2C0049BF3A /* Model */,
@@ -146,6 +184,9 @@
 			dependencies = (
 			);
 			name = "Contacts App";
+			packageProductDependencies = (
+				D3732DEC29B777C500B3D560 /* RevenueCat */,
+			);
 			productName = "Contacts App";
 			productReference = D3F845FC29A73A580049BF3A /* Contacts App.app */;
 			productType = "com.apple.product-type.application";
@@ -174,6 +215,9 @@
 				Base,
 			);
 			mainGroup = D3F845F329A73A580049BF3A;
+			packageReferences = (
+				D3732DEB29B777C500B3D560 /* XCRemoteSwiftPackageReference "purchases-ios" */,
+			);
 			productRefGroup = D3F845FD29A73A580049BF3A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -190,6 +234,7 @@
 			files = (
 				D3F8460C29A73A590049BF3A /* LaunchScreen.storyboard in Resources */,
 				D3F8460929A73A590049BF3A /* Assets.xcassets in Resources */,
+				D3732DF029B778C100B3D560 /* StoreKitTestCertificateContacts.cer in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -203,12 +248,17 @@
 				D3F8461F29A751170049BF3A /* ContactsTableViewCell.swift in Sources */,
 				D3F8462329A752880049BF3A /* Extensions.swift in Sources */,
 				D3F8461A29A73B970049BF3A /* ContactManager.swift in Sources */,
+				D3732DE429B7733F00B3D560 /* OnboardingModel.swift in Sources */,
 				D3F8462129A751440049BF3A /* DetailedViewController.swift in Sources */,
 				D3F8461829A73B8D0049BF3A /* Contact.swift in Sources */,
 				D3F8461C29A7506F0049BF3A /* ContactType.swift in Sources */,
+				D3732DE829B7778A00B3D560 /* IAPManager.swift in Sources */,
 				D3F8460429A73A580049BF3A /* ContactsViewController.swift in Sources */,
+				D3A3ABEA29A779D90014BB50 /* OnboardingViewController.swift in Sources */,
 				D3F8460029A73A580049BF3A /* AppDelegate.swift in Sources */,
+				D3732DEA29B777AD00B3D560 /* PayWallViewController.swift in Sources */,
 				D3F8460229A73A580049BF3A /* SceneDelegate.swift in Sources */,
+				D3732DE629B7735800B3D560 /* OnboardingCollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -347,7 +397,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = KJD8QY3L82;
+				DEVELOPMENT_TEAM = 95S4N2TWZ7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Contacts App/App/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -374,7 +424,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = KJD8QY3L82;
+				DEVELOPMENT_TEAM = 95S4N2TWZ7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Contacts App/App/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -416,6 +466,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D3732DEB29B777C500B3D560 /* XCRemoteSwiftPackageReference "purchases-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RevenueCat/purchases-ios.git";
+			requirement = {
+				kind = exactVersion;
+				version = 4.9.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D3732DEC29B777C500B3D560 /* RevenueCat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D3732DEB29B777C500B3D560 /* XCRemoteSwiftPackageReference "purchases-ios" */;
+			productName = RevenueCat;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D3F845F429A73A580049BF3A /* Project object */;
 }

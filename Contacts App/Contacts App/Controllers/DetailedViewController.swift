@@ -430,7 +430,7 @@ class DetailedViewController: UIViewController {
         
         let alert = UIAlertController(title: "Delete contact", message: "Are you sure?", preferredStyle: .alert)
         
-        let yesAction = UIAlertAction(title: "Yes bitch" , style: .destructive) { _ in
+        let yesAction = UIAlertAction(title: "Yes" , style: .destructive) { _ in
             self.deleteContact()
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
@@ -480,13 +480,13 @@ class DetailedViewController: UIViewController {
         let alert = UIAlertController(title: "Edit", message: nil, preferredStyle: .alert)
       
         alert.addTextField { textField in
-            textField.placeholder = "First name"
+            textField.text = self.contact.firstName
         }
         alert.addTextField { textField in
-            textField.placeholder = "Last name"
+            textField.text = self.contact.lastName
         }
         alert.addTextField { textField in
-            textField.placeholder = "Phone number"
+            textField.text = self.contact.phoneNumber
         }
         
         let saveAction = UIAlertAction(title: "Save", style: .default) { _ in

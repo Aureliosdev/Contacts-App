@@ -30,6 +30,15 @@ class ContactsViewController: UIViewController, UITableViewDelegate, UITableView
         
     }()
     
+    private let searchTextField: UISearchBar = {
+        let field = UISearchBar()
+        field.translatesAutoresizingMaskIntoConstraints = false
+        field.placeholder = "Search Contact"
+        field.autocapitalizationType = .words
+        field.backgroundImage = UIImage()
+        return field
+    }()
+    
     var arrayOfContacts: [ContactGroup] = [] {
         didSet {
             tableView.reloadData()
@@ -40,12 +49,20 @@ class ContactsViewController: UIViewController, UITableViewDelegate, UITableView
         super.viewDidLoad()
         view.addSubview(tableView)
         view.addSubview(segmentedControl)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(didTapCreateContact))
-        navigationItem.rightBarButtonItem?.tintColor = .label
+        view.addSubview(searchTextField)
+       
+        let addContact =  UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(didTapCreateContact))
+        addContact.tintColor = .label
+        let premiumButton =  UIBarButtonItem(image: UIImage(systemName: "crown.fill"), style: .plain, target: self, action: #selector(didTapPremium))
+        
+        premiumButton.tintColor = .systemYellow
+        navigationItem.rightBarButtonItems = [addContact,premiumButton]
+//        navigationItem.rightBarButtonItem?.tintColor = .label
         navigationItem.title = "Contacts"
         view.backgroundColor = .systemBackground
         tableView.delegate = self
         tableView.dataSource = self
+        searchTextField.delegate = self
         tableView.refreshControl = UIRefreshControl()
         tableView.refreshControl?.addTarget(self, action: #selector(reloadDataSource), for: .valueChanged)
         segmentedControl.addTarget(self, action: #selector(didTapValueChanged), for: .valueChanged)
@@ -70,10 +87,14 @@ class ContactsViewController: UIViewController, UITableViewDelegate, UITableView
             segmentedControl.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor,constant: -70),
             segmentedControl.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,constant: 10),
             
+            searchTextField.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor,constant: 10),
+            searchTextField.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor,constant: -10),
+            searchTextField.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor,constant: 10),
+            
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             tableView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
             tableView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
-            tableView.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor,constant: 10)
+            tableView.topAnchor.constraint(equalTo: searchTextField.bottomAnchor,constant: 1)
         
         ])
     }
@@ -135,6 +156,13 @@ class ContactsViewController: UIViewController, UITableViewDelegate, UITableView
     func add(contact: Contact ) {
         contactManager.add(contact: contact)
         self.reloadDataSource()
+    }
+    
+    
+    @objc private func didTapPremium() {
+        let vc = UINavigationController(rootViewController:  PayWallViewController())
+//        vc.modalPresentationStyle = .fullScreen
+        present(vc, animated: true)
     }
     
     @objc private func reloadDataSource() {
@@ -246,5 +274,7 @@ class ContactsViewController: UIViewController, UITableViewDelegate, UITableView
         navigationController?.pushViewController(vc, animated: true)
     }
 }
-
+extension ContactsViewController: UISearchBarDelegate {
+    
+}
 
