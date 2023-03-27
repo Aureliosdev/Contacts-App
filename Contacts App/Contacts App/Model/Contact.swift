@@ -11,6 +11,7 @@ struct Contact: Codable {
     let firstName: String
     let lastName: String
     let phoneNumber: String
+    var imageData: Data?
 }
 
 struct ContactGroup {

@@ -7,11 +7,13 @@
 
 import UIKit
 
-class ContactsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ContactsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, ImagePickerDelegate {
 
     
     let contactManager = ContactManager()
-    
+    let imagePicker = UIImagePickerController()
+    var selectedIndexPath: IndexPath?
+    var selectedImage: UIImage?
     private let tableView: UITableView = {
         let table = UITableView()
         table.translatesAutoresizingMaskIntoConstraints = false
@@ -36,6 +38,7 @@ class ContactsViewController: UIViewController, UITableViewDelegate, UITableView
         field.placeholder = "Search Contact"
         field.autocapitalizationType = .words
         field.backgroundImage = UIImage()
+        field.autocapitalizationType = .none
         return field
     }()
     
@@ -44,6 +47,9 @@ class ContactsViewController: UIViewController, UITableViewDelegate, UITableView
             tableView.reloadData()
         }
     }
+    var filteredContacts: [Contact] = []
+    var contacts = [Contact]()
+    var isSearchBarActive = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -131,7 +137,7 @@ class ContactsViewController: UIViewController, UITableViewDelegate, UITableView
                 return
             }
             
-            let contact =   Contact(firstName: firstName, lastName: lastName, phoneNumber: phoneNumber)
+            let contact =   Contact(firstName: firstName, lastName: lastName, phoneNumber: phoneNumber, imageData: nil)
             self.add(contact: contact)
           
         }
@@ -231,29 +237,65 @@ class ContactsViewController: UIViewController, UITableViewDelegate, UITableView
         contactManager.deleteContact(contactToDelete: contact)
     }
     
+    func imagePickerDidFinishPicking(imageData: Data?) {
+         if let selectedIndexPath = tableView.indexPathForSelectedRow {
+            filteredContacts[selectedIndexPath.row].imageData = imageData
+             tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
+         }
+     }
+
+
+    func filterContacts(for searchText: String) -> [Contact] {
+        var filteredContacts = [Contact]()
+        
+        for group in arrayOfContacts {
+            let filteredGroupContacts = group.contacts.filter { contact in
+                return contact.firstName.lowercased().contains(searchText.lowercased()) || contact.lastName.lowercased().contains(searchText.lowercased())
+            }
+            filteredContacts.append(contentsOf: filteredGroupContacts)
+        }
+        
+        return filteredContacts
+    }
+
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
        
         let cell = tableView.dequeueReusableCell(withIdentifier: ContactsTableViewCell.identifier, for: indexPath) as! ContactsTableViewCell
+        let contactsToDisplay = isSearchBarActive ? filteredContacts : arrayOfContacts[indexPath.section].contacts
         
-        let contact = getContact(indexPath: indexPath)
-        
+        let contact = contactsToDisplay[indexPath.row]
         if segmentedControl.selectedSegmentIndex == 0 {
             cell.contactLabel.text = "\(contact.firstName) \(contact.lastName)"
+            
+
         }else if segmentedControl.selectedSegmentIndex == 1 {
             cell.contactLabel.text = "\(contact.lastName) \(contact.firstName)"
+
         }
+        if let imageData = UserDefaults.standard.data(forKey: "contactImage"), indexPath == selectedIndexPath {
+            cell.imageView!.image = UIImage(data: imageData)
+            } else {
+                cell.imageView!.image = nil
+            }
+        
+    
+        
         return cell
     }
+	
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return arrayOfContacts[section].contacts.count
+        return isSearchBarActive ? filteredContacts.count : arrayOfContacts[section].contacts.count
     }
+
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return tableView.frame.size.width / 7
     }
     func numberOfSections(in tableView: UITableView) -> Int {
-        return arrayOfContacts.count
+
+        return isSearchBarActive ? filteredContacts.count : arrayOfContacts.count
     }
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return arrayOfContacts[section].title
@@ -268,13 +310,32 @@ class ContactsViewController: UIViewController, UITableViewDelegate, UITableView
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
        let contact =  getContact(indexPath: indexPath)
-        
+     
         let vc = DetailedViewController()
         vc.contact = contact
         navigationController?.pushViewController(vc, animated: true)
+    
     }
 }
 extension ContactsViewController: UISearchBarDelegate {
     
+ 
+ 
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        searchTextField.resignFirstResponder()
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        filteredContacts = filterContacts(for: searchText)
+        isSearchBarActive = !searchText.isEmpty
+        print("isSearchBarActive: \(isSearchBarActive), filteredContacts: \(filteredContacts)")
+        tableView.reloadData()
+    }
+    
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+       isSearchBarActive = false
+        tableView.reloadData()
+    }
 }
 

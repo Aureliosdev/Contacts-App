@@ -68,7 +68,7 @@ class OnboardingCollectionViewCell: UICollectionViewCell {
         stackView.addArrangedSubview(imageView)
         stackView.addArrangedSubview(firstLabel)
         stackView.addArrangedSubview(descriptionLabel)
-        
+        setupConstraints()
 
         
     }
@@ -77,8 +77,15 @@ class OnboardingCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
+
+    
+    func setup(onboardingModel: OnboardingModel) {
+        imageView.image = UIImage(named: onboardingModel.imageName)
+        firstLabel.text = onboardingModel.title
+        descriptionLabel.text = onboardingModel.subtitle
+    }
+  
+    func setupConstraints() {
         NSLayoutConstraint.activate([
             stackView.leftAnchor.constraint(equalTo: contentView.leftAnchor,constant: 20),
             stackView.rightAnchor.constraint(equalTo: contentView.rightAnchor,constant: -20),
@@ -89,13 +96,6 @@ class OnboardingCollectionViewCell: UICollectionViewCell {
         ])
     
     }
-    
-    func setup(onboardingModel: OnboardingModel) {
-        imageView.image = UIImage(named: onboardingModel.imageName)
-        firstLabel.text = onboardingModel.title
-        descriptionLabel.text = onboardingModel.subtitle
-    }
-  
 }
 
 class PlaceholderImageView: UIImageView {

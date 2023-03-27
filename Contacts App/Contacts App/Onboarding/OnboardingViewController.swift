@@ -14,10 +14,9 @@ class OnboardingViewController: UIViewController {
         didSet {
             
             pageControl.numberOfPages = pages.count
+     
+             collectionView.reloadData()
             
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
-            }
     
         }
     }
@@ -47,6 +46,8 @@ class OnboardingViewController: UIViewController {
         button.tintColor = .white
         button.backgroundColor = .systemIndigo
         button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 50, bottom: 0, right: 30)
+       
+        button.layer.masksToBounds = true
         return button
     }()
     
@@ -80,11 +81,11 @@ class OnboardingViewController: UIViewController {
         view.addSubview(skipButton)
         view.addSubview(nextButton)
         view.addSubview(pageControl)
-
+        activateConstraints()
         generatePages()
         skipButton.addTarget(self, action: #selector(didTapSkip), for: .touchUpInside)
         nextButton.addTarget(self, action: #selector(didTapNext), for: .touchUpInside)
-    
+        pageControl.addTarget(self, action: #selector(didTapChangeValue), for: .valueChanged)
     }
     
     func generatePages() {
@@ -99,17 +100,23 @@ class OnboardingViewController: UIViewController {
         
     }
 
+
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        skipButton.layer.cornerRadius = skipButton.frame.height / 1.1
-        nextButton.layer.cornerRadius = nextButton.frame.height / 0.9
+    
+        skipButton.layer.cornerRadius = skipButton.frame.height / 2
+        nextButton.layer.cornerRadius = nextButton.frame.height / 2
+    }
 
+
+    func activateConstraints() {
         NSLayoutConstraint.activate([
             
-            collectionView.leftAnchor.constraint(equalTo: view.superview!.leftAnchor),
-            collectionView.rightAnchor.constraint(equalTo: view.superview!.rightAnchor),
-            collectionView.topAnchor.constraint(equalTo: view.superview!.topAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.superview!.bottomAnchor),
+            collectionView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
+            collectionView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
+            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
             
             skipButton.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor,constant: -20),
@@ -130,8 +137,6 @@ class OnboardingViewController: UIViewController {
             pageControl.bottomAnchor.constraint(equalTo: nextButton.topAnchor,constant: -32),
         ])
     }
-
-
     
     @objc private func didTapNext() {
         if pageControl.currentPage == pageControl.numberOfPages - 1 {
@@ -151,18 +156,39 @@ class OnboardingViewController: UIViewController {
     }
     
     func start() {
-        
+        UserDefaults.standard.set(true, forKey: "UserDidSeeOnboarding")
+        let vc = UINavigationController(rootViewController: ContactsViewController())
+        view.window?.rootViewController = vc
+        view.window?.makeKeyAndVisible()
     }
     
     func handlePageChanges() {
         if pageControl.currentPage == pageControl.numberOfPages - 1 {
             skipButton.isHidden = true
             nextButton.setTitle("Start", for: .normal)
+
         }else {
             skipButton.isHidden = false
             nextButton.setTitle("Next", for: .normal)
         }
     }
+    
+    @objc func didTapChangeValue() {
+        if pageControl.currentPage == pageControl.numberOfPages - 1 {
+            skipButton.isHidden = true
+            nextButton.setTitle("Start", for: .normal)
+            let x = CGFloat(pageControl.currentPage) * collectionView.frame.width
+            collectionView.setContentOffset(CGPoint(x: x, y: -96.7), animated: true)
+       
+        }else {
+            skipButton.isHidden = false
+            nextButton.setTitle("Next", for: .normal)
+            let x = CGFloat(pageControl.currentPage) * collectionView.frame.width
+            collectionView.setContentOffset(CGPoint(x: x, y: -96.7), animated: true)
+       
+        }
+    }
+    
 }
 
 extension OnboardingViewController: UICollectionViewDelegate, UICollectionViewDataSource {

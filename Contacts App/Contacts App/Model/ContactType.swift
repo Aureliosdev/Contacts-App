@@ -15,7 +15,7 @@ enum ContactType {
     var urlScheme: String {
         switch self {
         case .call:
-            return "tell://"
+            return "tel://"
         case .message:
             return "sms://"
         case .faceTime:

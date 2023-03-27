@@ -6,14 +6,23 @@
 //
 
 import UIKit
+import CoreData
 
-class DetailedViewController: UIViewController {
+protocol ImagePickerDelegate: AnyObject {
+    func imagePickerDidFinishPicking(imageData: Data?)
+}
 
+
+class DetailedViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+
+    
     var contact: Contact!
     var contactManager = ContactManager()
     var timer: Timer?
     var countDown = 0
     var countDownTotal = 5
+    weak var delegate: ImagePickerDelegate?
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     private let mainStackView: UIStackView = {
         let stack = UIStackView()
@@ -72,6 +81,15 @@ class DetailedViewController: UIViewController {
         label.text = "AB"
         label.textColor = .white
         return label
+    }()
+    
+    private let imageContact: UIImageView = {
+        let image = UIImageView()
+        image.contentMode = .scaleAspectFill
+        image.translatesAutoresizingMaskIntoConstraints = false
+        image.isHidden = false
+        image.clipsToBounds = true
+        return image
     }()
     
     private let fullName: UILabel = {
@@ -296,19 +314,33 @@ class DetailedViewController: UIViewController {
     
     }()
     
+
     
+    //MARK: - VIEWDIDLOAD
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(red: 0.898, green: 0.898, blue: 0.898, alpha: 1)
         setupUIElements()
+        
         cornerRadiuses()
+        setupConstraints()
         configureNavItems()
         setupContactContent()
         configureButtons()
         deleteButton.addTarget(self, action: #selector(didTapDelete), for: .touchUpInside)
         undodeleteButton.addTarget(self, action: #selector(didTapUndo), for: .touchUpInside)
-  
-        
+
+        configureGestureRecognizer()
+            saveImageInUserDefaults()
+     
+
+            
+    }
+    
+    public func saveImageInUserDefaults() {
+        if let imageData = UserDefaults.standard.data(forKey: "contactImage") {
+                imageContact.image = UIImage(data: imageData)
+            }
     }
     
     func configureButtons() {
@@ -353,6 +385,7 @@ class DetailedViewController: UIViewController {
         secondaryStackView.addArrangedSubview(mainView)
         mainView.addSubview(labelView)
         labelView.addSubview(initialsLabel)
+        labelView.addSubview(imageContact)
         secondaryStackView.addArrangedSubview(fullName)
         secondaryStackView.addArrangedSubview(stackForButtons)
         
@@ -379,8 +412,9 @@ class DetailedViewController: UIViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        setupConstraints()
+      
         labelView.layer.cornerRadius = labelView.frame.height / 2
+        imageContact.layer.cornerRadius = imageContact.frame.size.width / 2
     }
   
     
@@ -417,9 +451,16 @@ class DetailedViewController: UIViewController {
             initialsLabel.bottomAnchor.constraint(equalTo: labelView.bottomAnchor,constant: -16),
         ]
         
+        let imageContactConsts = [
+            imageContact.leadingAnchor.constraint(equalTo: labelView.leadingAnchor,constant: 0),
+            imageContact.trailingAnchor.constraint(equalTo: labelView.trailingAnchor,constant: 0),
+            imageContact.topAnchor.constraint(equalTo: labelView.topAnchor,constant: 0),
+            imageContact.bottomAnchor.constraint(equalTo: labelView.bottomAnchor,constant: 0),
+            
+            ]
         NSLayoutConstraint.activate(mainStackConsts)
         NSLayoutConstraint.activate(labelViewConsts)
-
+        NSLayoutConstraint.activate(imageContactConsts)
         NSLayoutConstraint.activate(deleteAndUndoButtonConsts)
         NSLayoutConstraint.activate(initialsLabelConsts)
 
@@ -503,9 +544,10 @@ class DetailedViewController: UIViewController {
                 return
             }
             
-            let editedContact = Contact(firstName: firstName, lastName: lastName, phoneNumber: phoneNumber)
+            let editedContact = Contact(firstName: firstName, lastName: lastName, phoneNumber: phoneNumber, imageData: nil)
             self.save(contact: editedContact)
             self.fullName.text = "\(firstName) \(lastName)"
+            self.phoneNumberButton.setTitle(phoneNumber, for: .normal)
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
         
@@ -541,6 +583,46 @@ class DetailedViewController: UIViewController {
     }
     
 
+    func configureGestureRecognizer() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(imageTapped))
+        imageContact.addGestureRecognizer(tapGesture)
+        imageContact.isUserInteractionEnabled = true
+    }
 
+    @objc func imageTapped() {
+        let picker = UIImagePickerController()
+        picker.sourceType = .photoLibrary
+        picker.delegate = self
+        present(picker,animated: true,completion: nil)
+    }
+    
+    func getDocumentsDirectory() -> URL {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let documentsDirectory = paths[0]
+        return documentsDirectory
+    }
+    
+    
+    //MARK: - Retrieve image from gallery
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let image = info[.originalImage] as? UIImage {
+            let imageData = image.pngData()
+            imageContact.image = image
+            imageContact.isHidden = false
+          
+            
+            
+            if let imageData = image.pngData() {
+                UserDefaults.standard.set(imageData, forKey: "contactImage")
+            }
+        }
+   
+        dismiss(animated: true, completion: nil)
+    }
 
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true,completion: nil)
+        
+    }
+    
 }

@@ -19,8 +19,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
-        let VC = UINavigationController(rootViewController:  ContactsViewController())
-        window?.rootViewController = VC
+        
+        let userDidSee = UserDefaults.standard.bool(forKey: "UserDidSeeOnboarding")
+        
+        if userDidSee {
+            window?.rootViewController = UINavigationController(rootViewController: ContactsViewController())
+        }else {
+            
+            window?.rootViewController = UINavigationController(rootViewController: OnboardingViewController())
+        }
+        
+        
         window?.makeKeyAndVisible()
     }
 
